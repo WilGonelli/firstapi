@@ -4,6 +4,8 @@ import express, { Request, Response } from "express";
 // Initialize an Express application
 const app = express();
 
+app.use(express.json());
+
 /**
  * Define a GET route.
  *
@@ -14,6 +16,21 @@ const app = express();
  */
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("ok");
+});
+
+interface UserBody {
+  userName: string;
+  email: string;
+}
+
+app.post("/users", (req: Request, res: Response) => {
+  const { userName, email }: UserBody = req.body;
+  if (!userName || !email) {
+    res.status(400).json({ error: "campo userName e email sao obrigatorios" });
+    return;
+  } else {
+    res.status(201).send("ok");
+  }
 });
 
 // Start the server and listen on port 8080
